@@ -64,12 +64,45 @@ public class CalculatorThread implements Runnable {
 
     // This method will be called to calculate the result of a calculation request
     public String calculate(String request) throws Exception {
-        // TODO: Break apart the request and calculate the result
-        // TODO: Log the calculation request
+        // Split input into an array of strings
+        String[] input = request.split(" ");
 
-        // NOTE: This needs to end in a newline character
-        // or else the client will not read the result
-        return "Your request was " + request.length() + " characters long!\n";
+        // Check to make sure the right num of arguments are in there
+        if (input.length != 3) {
+            return "ERROR: Invalid input for calculation. Format: [operation] [number] [number]\n";
+        }
+
+        // Get the operation
+        String operation = input[0];
+
+        // Get the numbers
+        try {
+            double num1 = Double.parseDouble(input[1]);
+            double num2 = Double.parseDouble(input[2]);
+
+            // Calculate the result
+            double result = 0;
+            switch (operation) {
+                case "ADD":
+                    result = num1 + num2;
+                    break;
+                case "SUB":
+                    result = num1 - num2;
+                    break;
+                case "MUL":
+                    result = num1 * num2;
+                    break;
+                case "DIV":
+                    result = num1 / num2;
+                    break;
+                default:
+                    return "ERROR: Invalid operation. Valid operations: ADD, SUB, MUL, DIV\n";
+            }
+
+            return result + "\n";
+        } catch (NumberFormatException e) {
+            return "ERROR: Invalid numbers in calculation string. Numbers must be in the format of a double\n";
+        }
     }
 
     // This is the method that will be called when the thread is started
