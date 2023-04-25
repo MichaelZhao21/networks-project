@@ -6,7 +6,11 @@ Made for CS 4390 at UTD. See [instructions.pdf](instructions.pdf) for the projec
 
 Type `make` to build all classes.
 
-Run server using `java Server <port>`. Run client using `java Client <hostname> <port>`.
+1. Run the server on a machine. `java Server <port>`
+2. Connect client to server. `java Client <hostname> <port>`
+3. (Client side) Enter a calculation. `[OPERAND1] [OPERATION] [OPERAND2]`
+4. (Client side) When need to close connection, enter empty line.
+5. (Server side) Note log of all conections and requests in real-time.
 
 ## Format
 
@@ -21,8 +25,9 @@ Connection ERR message format:
 [ERR_MESSAGE] [NEWLINE]
 
 Calculation message format:
-[OPERATION] [OPERAND1] [OPERAND2] [NEWLINE]
-eg. ADD 1 2
+[OPERAND1] [OPERATION] [OPERAND2] [NEWLINE]
+eg. 1 + 2
+eg. 1-2
 
 Calculation result message format:
 [RESULT] [NEWLINE]

@@ -11,6 +11,7 @@ public class CalculatorThread implements Runnable {
         this.client = client;
     }
 
+    // This method will keep running while client is connected to server
     public void handleClient() throws Exception {
         // Get the streams for sending and receiving data from the client
         BufferedReader receiver = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -64,44 +65,60 @@ public class CalculatorThread implements Runnable {
 
     // This method will be called to calculate the result of a calculation request
     public String calculate(String request) throws Exception {
+        char[] ops = {'+', '-', '*', '/'};
+        int opCount = 0;
+
+        //Fix formatting
+        request = request.replace(" ", "");
+        for(char op : ops){
+            if(request.indexOf(op) != -1){
+                request = request.replace(""+op, " "+op+" ");
+                opCount++;
+            }
+        }
+
         // Split input into an array of strings
         String[] input = request.split(" ");
 
         // Check to make sure the right num of arguments are in there
-        if (input.length != 3) {
-            return "ERROR: Invalid input for calculation. Format: [operation] [number] [number]\n";
+        if (input.length != 3 || opCount != 1) {
+            return "ERROR: Invalid input for calculation. Format: [number] [operation] [number]\n";
         }
 
         // Get the operation
-        String operation = input[0];
+        String operation = input[1];
 
         // Get the numbers
         try {
-            double num1 = Double.parseDouble(input[1]);
+            double num1 = Double.parseDouble(input[0]);
             double num2 = Double.parseDouble(input[2]);
 
             // Calculate the result
             double result = 0;
             switch (operation) {
-                case "ADD":
+                case "+":
                     result = num1 + num2;
                     break;
-                case "SUB":
+                case "-":
                     result = num1 - num2;
                     break;
-                case "MUL":
+                case "*":
                     result = num1 * num2;
                     break;
-                case "DIV":
+                case "/":
                     result = num1 / num2;
                     break;
                 default:
-                    return "ERROR: Invalid operation. Valid operations: ADD, SUB, MUL, DIV\n";
+                    return "ERROR: Invalid operation. Valid operations: +, -, *, /\n";
             }
 
+            // If possible return an int instead of a double
+            int intCast = (int)result;
+            if (intCast == result) return intCast + "\n";
             return result + "\n";
+
         } catch (NumberFormatException e) {
-            return "ERROR: Invalid numbers in calculation string. Numbers must be in the format of a double\n";
+            return "ERROR: Invalid numbers in calculation string. Operand must be in the format of a double or int\n";
         }
     }
 
