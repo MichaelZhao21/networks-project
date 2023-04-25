@@ -62,7 +62,6 @@ public class Client {
             throw new ConnectionException("Server did not acknowledge connection request");
         }
 
-        // TODO: Replace this with random calculations
         Scanner scan = new Scanner(System.in);
         
         while (true) {
@@ -71,7 +70,6 @@ public class Client {
             String request = scan.nextLine();
 
             // If the request is empty, close the connection
-            // TODO: This will also change when we add random calculations
             if (request.equals("")) {
                 sender.println(CLOSE_MESSAGE);
                 sender.flush();
@@ -87,7 +85,6 @@ public class Client {
             System.out.println("Result: " + result);
         }
 
-        // TODO: This will also be removed when we add random calculations
         scan.close();
 
         // Close the socket
