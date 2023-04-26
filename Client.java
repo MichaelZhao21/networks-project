@@ -11,6 +11,9 @@ public class Client {
     public static final String ACK_MESSAGE = "ok";
     public static final String ERR_MESSAGE = "err";
 
+    public static Socket sock = null;
+    public static PrintWriter sender = null;
+
     public static void main(String[] args) {
         // Check to make sure args are all there
         if (args.length < 2) {
@@ -33,9 +36,25 @@ public class Client {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 10; i++) {
             sb.append((char) (r.nextInt(26) + 'a'));
-        } 
+        }
         String name = sb.toString();
 
+        // Close socket on shutdown (CTRL+C)
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                try {
+                    if (sender != null) {
+                        sender.println(CLOSE_MESSAGE);
+                        sender.flush();
+                    }
+                    if (sock != null) {
+                        sock.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         try {
             runClient(hostName, port, name);
         } catch (Exception e) {
@@ -47,8 +66,8 @@ public class Client {
     public static void runClient(String hostName, int port, String name) throws Exception {
         // Create the socket and get the streams for sending and receiving
         // data from the server
-        Socket sock = new Socket(hostName, port);
-        PrintWriter sender = new PrintWriter(sock.getOutputStream());
+        sock = new Socket(hostName, port);
+        sender = new PrintWriter(sock.getOutputStream());
         BufferedReader receiver = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 
         // Send initial connection request
@@ -63,7 +82,7 @@ public class Client {
         }
 
         Scanner scan = new Scanner(System.in);
-        
+
         while (true) {
             // Get calculation request
             System.out.print("Enter calculation: ");
