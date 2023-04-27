@@ -30,6 +30,7 @@ public class Server {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 Logger.close();
+                System.out.println("Logs saved to log.txt");
             }
         });
 

@@ -31,7 +31,8 @@ public class Logger {
 
     public static void log(String data) {
         String currTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date(System.currentTimeMillis()));
-        System.out.println("[LOG " + currTime + "] " + data);
+        String output = "[LOG " + currTime + "] " + data;
+        System.out.println(output);
         l.writer.println(data);
         l.writer.flush();
     }
