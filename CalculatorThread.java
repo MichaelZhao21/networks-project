@@ -6,6 +6,7 @@ import java.net.Socket;
 public class CalculatorThread implements Runnable {
     public Socket client;
     public String clientName;
+    public long connectionTime;
 
     public CalculatorThread(Socket client) {
         this.client = client;
@@ -29,6 +30,9 @@ public class CalculatorThread implements Runnable {
         // Get the client name
         clientName = connRequest.substring(Client.CONNECTION_MESSAGE.length() + 1);
 
+        // Get the current time
+        connectionTime = System.currentTimeMillis();
+
         // Log that the client has connected
         Logger.log("Client " + clientName + " has connected");
 
@@ -45,7 +49,8 @@ public class CalculatorThread implements Runnable {
 
             // Exit if client sends close message
             if (request.equals(Client.CLOSE_MESSAGE)) {
-                Logger.log("Client " + clientName + " has disconnected");
+                long connTime = System.currentTimeMillis() - connectionTime;
+                Logger.log("Client " + clientName + " has disconnected after " + (connTime/1000.0) + "s");
                 break;
             }
 
@@ -55,7 +60,7 @@ public class CalculatorThread implements Runnable {
             // Calculate the result
             String result = calculate(request);
             Logger.log("RESULT: " + result, clientName);
-            sender.write(result);
+            sender.write(result + '\n');
             sender.flush();
         }
 
@@ -65,14 +70,14 @@ public class CalculatorThread implements Runnable {
 
     // This method will be called to calculate the result of a calculation request
     public String calculate(String request) throws Exception {
-        char[] ops = {'+', '-', '*', '/'};
+        char[] ops = { '+', '-', '*', '/' };
         int opCount = 0;
 
-        //Fix formatting
+        // Fix formatting
         request = request.replace(" ", "");
-        for(char op : ops){
-            if(request.indexOf(op) != -1){
-                request = request.replace(""+op, " "+op+" ");
+        for (char op : ops) {
+            if (request.indexOf(op) != -1) {
+                request = request.replace("" + op, " " + op + " ");
                 opCount++;
             }
         }
@@ -82,7 +87,7 @@ public class CalculatorThread implements Runnable {
 
         // Check to make sure the right num of arguments are in there
         if (input.length != 3 || opCount != 1) {
-            return "ERROR: Invalid input for calculation. Format: [number] [operation] [number]\n";
+            return "ERROR: Invalid input for calculation. Format: [number] [operation] [number]";
         }
 
         // Get the operation
@@ -109,16 +114,16 @@ public class CalculatorThread implements Runnable {
                     result = num1 / num2;
                     break;
                 default:
-                    return "ERROR: Invalid operation. Valid operations: +, -, *, /\n";
+                    return "ERROR: Invalid operation. Valid operations: +, -, *, /";
             }
 
             // If possible return an int instead of a double
-            int intCast = (int)result;
-            if (intCast == result) return intCast + "\n";
-            return result + "\n";
+            if ((result % 1) == 0)
+                return Integer.toString((int) result);
+            return Double.toString(result);
 
         } catch (NumberFormatException e) {
-            return "ERROR: Invalid numbers in calculation string. Operand must be in the format of a double or int\n";
+            return "ERROR: Invalid numbers in calculation string. Operand must be in the format of a double or int";
         }
     }
 
