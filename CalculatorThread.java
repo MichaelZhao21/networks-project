@@ -118,10 +118,9 @@ public class CalculatorThread implements Runnable {
             }
 
             // If possible return an int instead of a double
-            int intCast = (int) result;
-            if (intCast == result)
-                return Integer.toString(intCast);
-            return Double.toString(intCast);
+            if ((result % 1) == 0)
+                return Integer.toString((int) result);
+            return Double.toString(result);
 
         } catch (NumberFormatException e) {
             return "ERROR: Invalid numbers in calculation string. Operand must be in the format of a double or int";
