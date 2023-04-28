@@ -7,6 +7,10 @@ public class Server {
     // List of clients
     public static ArrayList<CalculatorThread> clientList = new ArrayList<>();
 
+    /**
+     * This is the main method for the server
+     * @param args The command line arguments
+     */
     public static void main(String[] args) {
         // Check to make sure args are all there
         if (args.length < 1) {
@@ -42,6 +46,11 @@ public class Server {
         }
     }
 
+    /**
+     * This method will run the server
+     * @param port The port of the server
+     * @throws Exception If there is an error, it will be thrown
+     */
     public static void runServer(int port) throws Exception {
         // Create a thread pool
         ExecutorService pool = Executors.newCachedThreadPool();

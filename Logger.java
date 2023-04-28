@@ -16,6 +16,10 @@ public class Logger {
     private static Logger l;
     private PrintWriter writer;
 
+    /**
+     * This is the constructor for the Logger class.
+     * This is a singleton class, so it has a private constructor.
+     */
     private Logger() {
         try {
             writer = new PrintWriter(new File("log.txt"));
@@ -24,11 +28,18 @@ public class Logger {
         }
     }
 
+    /**
+     * This method will initialize the logger if it has not already been initialized.
+     */
     public static void init() {
         if (l == null)
             l = new Logger();
     }
 
+    /**
+     * This method will write a message to the log file and console.
+     * @param data The message to be written to the log file and console
+     */
     public static void log(String data) {
         String currTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date(System.currentTimeMillis()));
         String output = "[LOG " + currTime + "] " + data;
@@ -37,6 +48,11 @@ public class Logger {
         l.writer.flush();
     }
 
+    /**
+     * This method will write a message to the log file and console.
+     * @param data The message to be written to the log file and console
+     * @param clientName The name of the client that sent the request
+     */
     public static void log(String data, String clientName) {
         String currTime = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date(System.currentTimeMillis()));
         String output = "[LOG " + currTime + "] " + clientName + " | " + data;
@@ -45,6 +61,9 @@ public class Logger {
         l.writer.flush();
     }
 
+    /**
+     * This method will close the log file writer.
+     */
     public static void close() {
         l.writer.close();
     }

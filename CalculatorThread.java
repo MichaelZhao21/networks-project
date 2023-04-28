@@ -8,11 +8,18 @@ public class CalculatorThread implements Runnable {
     public String clientName;
     public long connectionTime;
 
+    /**
+     * This is the constructor for the CalculatorThread class
+     * @param client The client socket that this thread will be handling
+     */
     public CalculatorThread(Socket client) {
         this.client = client;
     }
 
-    // This method will keep running while client is connected to server
+    /**
+     * This method will be called to handle the client
+     * @throws Exception If there is an error handling the client, it will be thrown
+     */
     public void handleClient() throws Exception {
         // Get the streams for sending and receiving data from the client
         BufferedReader receiver = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -68,7 +75,12 @@ public class CalculatorThread implements Runnable {
         client.close();
     }
 
-    // This method will be called to calculate the result of a calculation request
+    /**
+     * This method will calculate the result of a calculation request
+     * @param request The request to calculate
+     * @return The result of the calculation
+     * @throws Exception If there is an error calculating the result, it will be thrown
+     */
     public String calculate(String request) throws Exception {
         char[] ops = { '+', '-', '*', '/' };
         int opCount = 0;
@@ -127,7 +139,9 @@ public class CalculatorThread implements Runnable {
         }
     }
 
-    // This is the method that will be called when the thread is started
+    /**
+     * This method will be called when the thread is started
+     */
     @Override
     public void run() {
         // Handle the client

@@ -14,6 +14,10 @@ public class Client {
     public static Socket sock = null;
     public static PrintWriter sender = null;
 
+    /**
+     * This is the main method for the client
+     * @param args The command line arguments
+     */
     public static void main(String[] args) {
         // Check to make sure args are all there
         if (args.length < 2) {
@@ -63,6 +67,13 @@ public class Client {
 
     }
 
+    /**
+     * This method will run the client
+     * @param hostName The hostname of the server
+     * @param port The port of the server
+     * @param name The name of the client
+     * @throws Exception If there is an error running the client, it will be thrown
+     */
     public static void runClient(String hostName, int port, String name) throws Exception {
         // Create the socket and get the streams for sending and receiving
         // data from the server
